@@ -56,14 +56,20 @@ fi
 
 info "Install $PROJECT"
 # install python packages
+
 pip3 install -r $PROJECT_ROOT/requirements.txt
-if [ ! $? -eq 0 ]; then
-    error "Failed to install gwlink_manager python library"
+
+if [ ! -f $PROJECT_ROOT/requirements.txt ]; then
+    error "Not found gwlink_manager python library requirement file, $$PROJECT_ROOT/requirements.txt"
 fi
 
 # deploy rabbitmq service & pod
 # check rabbitmq service & pod
 info "Install $PROJECT MQTT"
+if [ ! -f $PROJECT_ROOT/rabbitmq/rabbitmq.yaml ]; then
+    error "Not found MQTT k8s manifest file, $PROJECT_ROOT/rabbitmq/rabbitmq.yaml"
+fi
+
 kubectl apply -f rabbitmq.yaml
 
 # install service
@@ -77,13 +83,12 @@ After=network.target
 [Service]
 User=root
 Group=root
-Environment="GWLINK_MANAGER_HOST=$HTTP_HOST"
 
 LimitNOFILE=1048576
 Restart=on-failure
 RestartSec=1
  
-ExecStart=/usr/bin/sudo /usr/bin/python3 manage.py runserver 0.0.0.0:$HTTP_PORT
+ExecStart=/usr/bin/sudo GWLINK_MANAGER_HOST=$HTTP_HOST /usr/bin/python3 manage.py runserver 0.0.0.0:$HTTP_PORT
 WorkingDirectory=$PROJECT_ROOT
 StandardOutput=syslog
 StandardError=syslog
