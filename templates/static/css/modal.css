@@ -1,0 +1,191 @@
+/* modal */
+.modal {
+  color: #fff;
+  background-color: rgba(152, 166, 173, 0.7);
+}
+
+.modal-content {
+  background-color: #37404A;
+}
+
+.modal-header,
+.modal-footer {
+  border: 0;
+}
+
+.modal-body {
+  font-weight: 300;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-body-emphasis {
+  color: #40B1D4;
+}
+
+.btn.btn-primary {
+  background-color: #0ACF97;
+  border: 0;
+}
+
+.btn.btn-primary:hover {
+  background-color: #099e74;
+}
+
+.btn.btn-secondary {
+  background-color: #f5f5f5;
+  color: #98A6AD;
+}
+
+.modal-header .btn-close {
+  opacity: 1;
+  background: url(../images/ico-close.svg) center center no-repeat;
+}
+
+.color-red {
+  color: #ff7792;
+}
+
+.color-green {
+  color: #0ACF97;
+}
+
+.mb-3 label {
+  display: inline-block;
+  color: #fff;
+  min-width: 24%;
+}
+
+.mb-3 label i {
+  color: #ff7792;
+  font-size: 18px;
+}
+
+.mb-3 input,
+.form-select {
+  display: inline-block;
+  width: 75%;
+  background-color: transparent;
+  border-color: #98A6AD;
+  color: #fff;
+}
+
+.mb-3 input::placeholder {
+  color: #98A6AD;
+}
+
+.form-control:disabled {
+  background-color: #343A40;
+  border: none;
+  color: #F5F5F5;
+}
+
+.form-select {
+  cursor: pointer;
+  padding: .375rem 1.2rem .375rem 0.75rem;
+  background: url("../images/ico-arrow-bottom.svg") no-repeat right;
+  color: #f5f5f5;
+}
+
+.form-select option {
+  background-color: #343A40;
+}
+
+.copy-text {
+  background-color: #343A40;
+  padding: 8px;
+  margin-top: 16px;
+  color: #fff;
+  height: 100px;
+  word-break: break-all;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.form-check {
+  line-height: 1.7rem;
+}
+
+.form-check-input {
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+}
+
+.form-check-input:checked {
+  background-color: #40B1D4;
+  border-color: #40B1D4;
+}
+
+.modal-body-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+
+.modal-body-header:first-child {
+  margin-left: 5%;
+}
+
+.modal-body-header .form-dropdown-wrapper {
+  margin: 0;
+}
+
+.modal-body-header .form-dropdown-wrapper .form-dropdown:last-child {
+  margin: 0;
+}
+
+.yaml-read-file {
+  background-color: #40B1D4;
+  color: #fff;
+  padding: 4px 8px;
+  font-size: 14px;
+  text-shadow: 0 0 3px #333;
+}
+
+.LN_area {
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  height: 300px;
+  line-height: 24px;
+  margin-bottom: 16px;
+}
+
+.modal-body-read {
+  background-color: #343A40;
+  width: 95%;
+  min-height: 300px;
+  margin-left: 1%;
+  padding: 6px 8px;
+  color: #fff;
+  font-weight: 300;
+  outline: none;
+  border: none;
+}
+
+.modal-body-read-error {
+  background-color: #343A40;
+  width: 95%;
+  min-height: 60px;
+  margin-left: 5%;
+  padding: 6px 8px;
+  color: #FA5C7C;
+  font-weight: 300;
+  text-align: left;
+  outline: none;
+  border: none;
+}
+
+.hidden {
+  visibility: hidden;
+  width: 1px;
+}
+
+.mb-3.password input {
+  width: 285px;
+}

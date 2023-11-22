@@ -1,0 +1,100 @@
+{% load static %}
+{% include "modals.html" %}
+
+<header>
+  <div class="logo">
+    <a href="{% url "frontend:home" %}">
+      <h1 class="logo-title">ETRI</h1>
+      <img src="{% static "images/logo.svg" %}" alt="ETRI logo"/>
+    </a>
+  </div>
+  <div class="to-right">
+    <a href="#" class="import-yaml" data-bs-toggle="modal" data-bs-target="#yamlModal">
+      Import YAML
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="#A0AEB6" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M18 18H6C5.44772 18 5 18.4477 5 19C5 19.5523 5.44772 20 6 20H18C18.5523 20 19 19.5523 19 19C19 18.4477 18.5523 18 18 18Z"/>
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M9.00003 4C9.00003 3.44772 9.44774 3 10 3H14C14.5523 3 15 3.44772 15 4V8.96916H17C17.4043 8.96916 17.7688 9.21255 17.9237 9.58594C18.0786 9.95932 17.9935 10.3893 17.708 10.6754L15.2042 13.185L15.2021 13.1872L12.7062 15.7041C12.5184 15.8935 12.2628 16 11.9961 16C11.7295 16 11.4738 15.8935 11.2861 15.7041L6.29099 10.6743C6.00613 10.3879 5.92157 9.95822 6.07667 9.58522C6.23177 9.21221 6.59606 8.96916 7.00003 8.96916L9.00003 8.96916V4ZM11 5V9.96916C11 10.5214 10.5523 10.9692 10 10.9692H9.40494L10.2081 11.7768L11.9961 13.5798L13.7862 11.7746L14.5898 10.9692H14C13.4477 10.9692 13 10.5214 13 9.96916V5H11Z"/>
+      </svg>
+    </a>
+  </div>
+  <div class="profile">
+    <a href="#" class="profile-drop dropdown-toggle" data-bs-toggle="dropdown"
+       aria-expanded="false">
+      <figure class="profile-image" style="background-image: url(#)">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="16" fill="#F5F5F5"/>
+          <circle cx="16.124" cy="13" r="6" fill="#A0AEB6"/>
+          <ellipse cx="16.1245" cy="30" rx="15" ry="10" fill="#A0AEB6"/>
+        </svg>
+      </figure>
+      <span>{{ user.username }}<br/>{{ user.organization }}</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-animated" id="dropdown-menu">
+      <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal">Profile</a></li>
+      <li><a class="dropdown-item" id="logout">Logout</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- Import YAML Modal -->
+{% with default_cluster=clusters.clusters.0 default_namespace=namespaces.namespaces.0 %}
+  <div class="modal fade" id="yamlModal" tabindex="-1" aria-labelledby="yamlModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="yamlModalLabel">Import YAML</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-body-header">
+            <div>
+              <label type="button" for="importYaml" class="yaml-read-file">Read from file</label>
+              <input type="file" name="importYaml" id="importYaml" class="hidden"/>
+            </div>
+            <div class="form-dropdown-wrapper">
+              <div class="form-dropdown" onclick="dropdownSelected(1)">
+                <a class="dropdown-select dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                  <span class="dropdown-select-title">Cluster</span>
+                  <span id="selected-import-yaml-cluster-name">{{ default_cluster.name }}</span>
+                </a>
+                <ul class="dropdown-menu" id="import-yaml-cluster-list">
+                  {% for cluster in clusters.clusters %}
+                    <li><a class="import-yaml-cluster-item" href="#">{{ cluster.name }}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+<!--              <div class="form-dropdown" onclick="dropdownSelected(2)">-->
+<!--                <a class="dropdown-select dropdown-toggle" type="button" data-bs-toggle="dropdown"-->
+<!--                   aria-expanded="false">-->
+<!--                  <span class="dropdown-select-title">Namespace</span>-->
+<!--                  <span id="selected-import-yaml-namespace-name">{{ default_namespace.name }}</span>-->
+<!--                </a>-->
+<!--                <ul class="dropdown-menu" id="import-yaml-namespace-list">-->
+<!--                  {% for namespace in namespaces.namespaces %}-->
+<!--                    {% if namespace.name != "_all_" %}-->
+<!--                    <li><a class="import-yaml-namespace-item" href="#">{{ namespace.name }}</a></li>-->
+<!--                    {% endif %}-->
+<!--                  {% endfor %}-->
+<!--                </ul>-->
+<!--              </div>-->
+            </div>
+          </div>
+          <div>
+            <textarea id="readYamlArea" class="modal-body-read"></textarea>
+          </div>
+          <div>
+            <textarea id="YamlError" class="modal-body-read-error"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="cancelImportYaml()">Cancel
+          </button>
+          <button type="button" class="btn btn-primary btn-blue" id="import-yaml">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endwith %}

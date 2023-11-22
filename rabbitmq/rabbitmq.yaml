@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gedge-system
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: gedge-system
+  name: rabbitmq
+spec:
+  replicas: 1
+  serviceName: rabbitmq
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+      - name: rabbitmq
+        image: krunivs/rabbitmq-custom:3.7-management
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: gedge-system
+  name: rabbitmq-nodeport
+  labels:
+    app: rabbitmq
+spec:
+  type: NodePort
+  selector:
+    app: rabbitmq
+  ports:
+  - nodePort: 30000
+    port: 15672
+    name: http
+    targetPort: 15672
+  - nodePort: 30001
+    port: 5672
+    name: amqp
+    targetPort: 5672
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: gedge-system
+  name: rabbitmq-clusterip
+  labels:
+    app: rabbitmq
+spec:
+  type: ClusterIP
+  selector:
+    app: rabbitmq
+  ports:
+  - port: 4369
+    name: epmd
+    targetPort: 4369
+  - port: 1883
+    name: mqtt
+    targetPort: 1883
+

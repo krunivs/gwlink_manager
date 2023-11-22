@@ -1,0 +1,67 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+{% include 'head.html' %}
+<body class="login">
+<!-- contents -->
+<div class="login-container">
+  <div class="login-header">
+    <a href="{% url 'frontend:login' %}">
+      <img src="{% static "images/logo.svg" %}" alt="ETRI logo"/>
+    </a>
+  </div>
+  <div class="login-content">
+    <div class="login-text">
+      <h2 class="login-h2">Sign In</h2>
+      <p>Enter your email address and password to access admin panel.</p>
+    </div>
+    <form id="loginForm">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="id_email" class="login-form-label">Email</label>
+        <input
+            type="text"
+            name="email"
+            class="login-form-control"
+            autofocus
+            placeholder="Enter your email"
+            autocapitalize="none"
+            autocomplete="email"
+            maxlength="255"
+            required
+            id="id_email"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="id_password" class="login-form-label">Password</label>
+        <input
+            type="password"
+            name="password"
+            class="login-form-control"
+            placeholder="Enter your password"
+            autocomplete="password"
+            id="id_password"
+        />
+      </div>
+      <div class="mb-3">
+        <div class="form-check">
+          <input
+              type="checkbox"
+              class="form-check-input"
+              id="checkbox-login"
+          />
+          <label for="checkbox-login" class="form-check-label"
+          >Remember me</label
+          >
+        </div>
+      </div>
+      <div class="mb-3" style="text-align: center">
+        <button class="btn-common btn-blue" type="submit" id="submitBtn">Log In</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script src="{% static 'js/pages/login.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+  <!-- Delete Modal User -->
+  <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteUserModalLabel">Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Do you want to delete it?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-red">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Modal -->
+  <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="createModalLabel">Create</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body color-red">
+          <form>
+            <div class="mb-0">
+              <label for="username" class="col-form-label">User ID <span class="required">*</span></label>
+              <input type="text" class="form-control" id="username"
+                     placeholder="Enter user ID">
+              <div id="username-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0">
+              <label for="email" class="col-form-label">Email <span class="required">*</span></label>
+              <input type="email" class="form-control" id="email"
+                     placeholder="Enter your email">
+              <div id="email-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0 password">
+              <label for="password" class="col-form-label">Password <span class="required">*</span></label>
+              <input type="password" class="form-control" id="password"
+                     placeholder="Enter password">
+              <label for="password2" class="col-form-label" hidden></label>
+              <input type="password" class="form-control" id="password2"
+                     placeholder="Confirm password">
+              <div class="ml-25">
+                <div id="password-error" class="error-message password invisible">error
+                </div>
+                <div id="password2-error" class="error-message password invisible">message
+                </div>
+              </div>
+            </div>
+            <div class="mb-0">
+              <label for="name" class="col-form-label">Name</label>
+              <input type="text" class="form-control" id="name"
+                     placeholder="Enter your name">
+              <div id="name-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0">
+              <label for="tel" class="col-form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="tel"
+                     placeholder="Enter your number">
+              <div id="tel-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0">
+              <label for="department" class="col-form-label">Department</label>
+              <input type="text" class="form-control" id="department"
+                     placeholder="Enter department">
+              <div id="department-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0">
+              <label for="organization" class="col-form-label">Organization</label>
+              <input type="text" class="form-control" id="organization"
+                     placeholder="Enter organization">
+              <div id="organization-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-blue">Create</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body color-red" name="edit-modal-body">
+          <form>
+            <div class="mb-0">
+              <label for="edit-username" class="col-form-label">User ID</label>
+              <input type="text" class="form-control" id="edit-username"
+                     placeholder="Enter user ID" disabled value="{{ user.username }}">
+              <div id="edit-username-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0">
+              <label for="edit-email" class="col-form-label">Email</label>
+              <input type="email" class="form-control" id="edit-email"
+                     placeholder="Enter your email" disabled value="{{ user.email }}">
+              <div id="edit-email-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0">
+              <label for="edit-name" class="col-form-label">Name</label>
+              <input type="text" class="form-control" id="edit-name"
+                     placeholder="Enter your name" value="{{ user.name }}">
+              <div id="edit-name-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0">
+              <label for="edit-tel" class="col-form-label">Phone Number</label>
+              <input type="tel" class="form-control" id="edit-tel"
+                     placeholder="Enter your number" value="{{ user.tel }}">
+              <div id="edit-tel-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0">
+              <label for="edit-department" class="col-form-label">Department</label>
+              <input type="text" class="form-control" id="edit-department"
+                     placeholder="Enter department" value="{{ user.department }}">
+              <div id="edit-department-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+            <div class="mb-0">
+              <label for="edit-organization" class="col-form-label">Organization</label>
+              <input type="text" class="form-control" id="edit-organization"
+                     placeholder="Enter organization" value="{{ user.organization }}">
+              <div id="edit-organization-error" class="error-message to-right w-75 invisible">error-message</div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-purple">Edit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- content -->
+  <section class="content">
+
+    <div class="content-title-group">
+      <h2>Account</h2>
+      <div class="btn-group">
+        <button
+            id="accountCreateModalBtn"
+            class="btn-common btn-blue"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#createModal"
+        >Create
+        </button>
+        <button
+            id="accountEditModalBtn"
+            class="btn-common btn-purple"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#editModal"
+        >Edit
+        </button>
+        <button
+            class="btn-common btn-red"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteUserModal"
+        >Delete
+        </button>
+      </div>
+    </div>
+
+    <!-- content-table -->
+    <table class="content-table">
+      <thead class="single-line">
+      <tr>
+        <th rowspan="2"></th>
+        <th rowspan="2">User ID</th>
+        <th rowspan="2">Email</th>
+        <th rowspan="2">Name</th>
+        <th rowspan="2">Phone Number</th>
+        <th rowspan="2">Department</th>
+        <th rowspan="2">Organization</th>
+      </tr>
+      </thead>
+      <tbody id="user-list">
+      {% for user in users %}
+        <tr>
+          <td><input type="radio" class="form-check-input" value="{{ user.username }}"></td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.tel }}</td>
+          <td>{{ user.department }}</td>
+          <td>{{ user.organization }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <script src="{% static 'js/pages/account.js' %}"></script>
+{% endblock %}

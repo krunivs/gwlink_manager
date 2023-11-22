@@ -1,0 +1,117 @@
+{% load static %}
+
+<aside class="menu" id="menu">
+  <div class="menu-cluster">
+    <a href="{% url "frontend:home" %}" id="home">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="#A0AEB6" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M3.75 3.75V8.25H6.75V3.75H3.75ZM3 2.25C2.58579 2.25 2.25 2.58579 2.25 3V9C2.25 9.41421 2.58579 9.75 3 9.75H7.5C7.91421 9.75 8.25 9.41421 8.25 9V3C8.25 2.58579 7.91421 2.25 7.5 2.25H3Z"/>
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M11.25 3.75V5.25H14.25V3.75H11.25ZM10.5 2.25C10.0858 2.25 9.75 2.58579 9.75 3V6C9.75 6.41421 10.0858 6.75 10.5 6.75H15C15.4142 6.75 15.75 6.41421 15.75 6V3C15.75 2.58579 15.4142 2.25 15 2.25H10.5Z"/>
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M3.75 12.75V14.25H6.75V12.75H3.75ZM3 11.25C2.58579 11.25 2.25 11.5858 2.25 12V15C2.25 15.4142 2.58579 15.75 3 15.75H7.5C7.91421 15.75 8.25 15.4142 8.25 15V12C8.25 11.5858 7.91421 11.25 7.5 11.25H3Z"/>
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M11.25 9.75V14.25H14.25V9.75H11.25ZM10.5 8.25C10.0858 8.25 9.75 8.58579 9.75 9V15C9.75 15.4142 10.0858 15.75 10.5 15.75H15C15.4142 15.75 15.75 15.4142 15.75 15V9C15.75 8.58579 15.4142 8.25 15 8.25H10.5Z"/>
+      </svg>
+      Cluster
+    </a>
+  </div>
+  <div class="menu-list menu-workloads">
+    <h6 class="menu-group">
+      <a class="acordeon-toggle" data-bs-toggle="collapse" href="#collapseWorkloads" role="button"
+         aria-expanded="true" aria-controls="collapseWorkloads">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="#A0AEB6" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.12259 2.05103L15.4286 5.49987L9.12251 8.94879L2.57142 5.49987L9.12259 2.05103Z"/>
+          <path d="M8.28794 9.78599L8.28794 16.9289L2.57365 14.0717L2.57365 6.92884L8.28794 9.78599Z"/>
+          <path d="M15.4286 14.0714L15.4286 6.92857L9.71427 9.78571V16.9286L15.4286 14.0714Z"/>
+        </svg>
+        Workloads
+      </a>
+    </h6>
+    <ul class="collapse show" id="collapseWorkloads">
+      <li>
+        <a href="{% url "frontend:pod" %}" id="pod">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="#A0AEB6" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M2 4.66683C2 3.93045 2.59695 3.3335 3.33333 3.3335H6.39052C6.74415 3.3335 7.08328 3.47397 7.33333 3.72402L8.27614 4.66683H12.6667C13.403 4.66683 14 5.26378 14 6.00016V11.3335C14 12.0699 13.403 12.6668 12.6667 12.6668H3.33333C2.59695 12.6668 2 12.0699 2 11.3335V4.66683ZM6.39052 4.66683H3.33333V11.3335H12.6667V6.00016H8.27614C7.92252 6.00016 7.58338 5.85969 7.33333 5.60964L6.39052 4.66683Z"/>
+          </svg>
+          Pod
+        </a>
+      </li>
+      <li>
+        <a href="{% url "frontend:deployment" %}" id="deployment">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="#A0AEB6" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M2 4.66683C2 3.93045 2.59695 3.3335 3.33333 3.3335H6.39052C6.74415 3.3335 7.08328 3.47397 7.33333 3.72402L8.27614 4.66683H12.6667C13.403 4.66683 14 5.26378 14 6.00016V11.3335C14 12.0699 13.403 12.6668 12.6667 12.6668H3.33333C2.59695 12.6668 2 12.0699 2 11.3335V4.66683ZM6.39052 4.66683H3.33333V11.3335H12.6667V6.00016H8.27614C7.92252 6.00016 7.58338 5.85969 7.33333 5.60964L6.39052 4.66683Z"/>
+          </svg>
+          Deployment
+        </a>
+      </li>
+      <li>
+        <a href="{% url "frontend:daemonset" %}" id="daemonset">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="#A0AEB6" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M2 4.66683C2 3.93045 2.59695 3.3335 3.33333 3.3335H6.39052C6.74415 3.3335 7.08328 3.47397 7.33333 3.72402L8.27614 4.66683H12.6667C13.403 4.66683 14 5.26378 14 6.00016V11.3335C14 12.0699 13.403 12.6668 12.6667 12.6668H3.33333C2.59695 12.6668 2 12.0699 2 11.3335V4.66683ZM6.39052 4.66683H3.33333V11.3335H12.6667V6.00016H8.27614C7.92252 6.00016 7.58338 5.85969 7.33333 5.60964L6.39052 4.66683Z"/>
+          </svg>
+          DaemonSet
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="menu-list menu-service">
+    <h6 class="menu-group">
+      <a class="acordeon-toggle" data-bs-toggle="collapse" href="#collapseService" role="button"
+         aria-expanded="true" aria-controls="collapseService">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <mask id="path-1-inside-1_450_426" fill="#A0AEB6">
+            <rect x="6" y="2" width="6" height="6" rx="1"/>
+          </mask>
+          <rect x="6" y="2" width="6" height="6" rx="1" stroke="#A0AEB6" stroke-width="3"
+                mask="url(#path-1-inside-1_450_426)"/>
+          <mask id="path-2-inside-2_450_426" fill="#A0AEB6">
+            <rect x="2" y="10" width="6" height="6" rx="1"/>
+          </mask>
+          <rect x="2" y="10" width="6" height="6" rx="1" stroke="#A0AEB6" stroke-width="3"
+                mask="url(#path-2-inside-2_450_426)"/>
+          <mask id="path-3-inside-3_450_426" fill="#A0AEB6">
+            <rect x="10" y="10" width="6" height="6" rx="1"/>
+          </mask>
+          <rect x="10" y="10" width="6" height="6" rx="1" stroke="#A0AEB6" stroke-width="3"
+                mask="url(#path-3-inside-3_450_426)"/>
+        </svg>
+        Service Discovery
+      </a>
+    </h6>
+    <ul class="collapse show" id="collapseService">
+      <li>
+        <a href="{% url "frontend:service" %}" id="service">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="#A0AEB6" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M2 4.66683C2 3.93045 2.59695 3.3335 3.33333 3.3335H6.39052C6.74415 3.3335 7.08328 3.47397 7.33333 3.72402L8.27614 4.66683H12.6667C13.403 4.66683 14 5.26378 14 6.00016V11.3335C14 12.0699 13.403 12.6668 12.6667 12.6668H3.33333C2.59695 12.6668 2 12.0699 2 11.3335V4.66683ZM6.39052 4.66683H3.33333V11.3335H12.6667V6.00016H8.27614C7.92252 6.00016 7.58338 5.85969 7.33333 5.60964L6.39052 4.66683Z"/>
+          </svg>
+          Service
+        </a>
+      </li>
+      <li>
+
+      </li>
+    </ul>
+  </div>
+  <div class="menu-cluster">
+    <a href="{% url "frontend:account" %}" id="account">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="#A0AEB6" xmlns="http://www.w3.org/2000/svg">
+        <mask id="mask0_462_4044" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="2" y="2"
+              width="12" height="12">
+          <path d="M2.66406 2.66699H13.3307V13.3337H2.66406V2.66699Z"/>
+        </mask>
+        <g mask="url(#mask0_462_4044)">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M7.99479 7.33398C8.73117 7.33398 9.32812 6.73703 9.32812 6.00065C9.32812 5.26427 8.73117 4.66732 7.99479 4.66732C7.25841 4.66732 6.66146 5.26427 6.66146 6.00065C6.66146 6.73703 7.25841 7.33398 7.99479 7.33398ZM7.99479 8.66732C9.46755 8.66732 10.6615 7.47341 10.6615 6.00065C10.6615 4.52789 9.46755 3.33398 7.99479 3.33398C6.52203 3.33398 5.32812 4.52789 5.32812 6.00065C5.32812 7.47341 6.52203 8.66732 7.99479 8.66732Z"/>
+          <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M5.95641 9.73996C6.60348 9.47194 7.29701 9.33398 7.99739 9.33398C8.69777 9.33398 9.3913 9.47194 10.0384 9.73996C10.6854 10.008 11.2734 10.4008 11.7686 10.8961C12.2639 11.3913 12.6567 11.9793 12.9247 12.6263C13.1928 13.2734 13.3307 13.9669 13.3307 14.6673H11.9974C11.9974 14.142 11.8939 13.6219 11.6929 13.1366C11.4919 12.6513 11.1973 12.2103 10.8258 11.8389C10.4544 11.4675 10.0134 11.1728 9.52812 10.9718C9.04282 10.7708 8.52268 10.6673 7.99739 10.6673C7.4721 10.6673 6.95196 10.7708 6.46666 10.9718C5.98135 11.1728 5.5404 11.4675 5.16896 11.8389C4.79753 12.2103 4.50289 12.6513 4.30187 13.1366C4.10085 13.6219 3.9974 14.142 3.9974 14.6673H2.66406C2.66406 13.9669 2.80201 13.2734 3.07003 12.6263C3.33806 11.9793 3.73091 11.3913 4.22615 10.8961C4.7214 10.4008 5.30934 10.008 5.95641 9.73996Z"/>
+        </g>
+      </svg>
+      Account
+    </a>
+  </div>
+</aside>

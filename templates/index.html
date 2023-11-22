@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+  {% with default_cluster=cluster_details.clusters.0 default_node=nodes.nodes.0 %}
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Confirm</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>You are attempting to delete the Cluster</p>
+            <p class="modal-body-emphasis selected-cluster-name">{{ default_cluster.name }}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary btn-red">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Migration Modal -->
+    <div class="modal fade" id="delete-modal-migration" tabindex="-1" aria-labelledby="deleteMigrationModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteMigrationModalLabel">Delete migration log</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>You are attempting to delete migration</p>
+            <p class="modal-body-emphasis" id="selected-migration-id"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary btn-red">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="importModalLabel">Import Existing Cluster</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body color-red">
+            <form>
+              <div class="mb-3">
+                <label for="import-cluster-name" class="col-form-label">Cluster Name<i>*</i></label>
+                <input type="text" class="form-control" id="import-cluster-name"
+                       placeholder="A unique name for the cluster">
+              </div>
+              <div class="mb-3">
+                <label for="import-cluster-remark" class="col-form-label">Cluster Description</label>
+                <input type="text" class="form-control" id="import-cluster-remark"
+                       placeholder="Any test you want that better describes this cluster">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary btn-blue">Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Connect Modal -->
+    <div class="modal fade" id="connectModal" tabindex="-1" aria-labelledby="connectModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="connectModalLabel">Connect to other cluster</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body color-red">
+            <form>
+              <div class="mb-3">
+                <label for="connect-cluster-name" class="col-form-label">Cluster Name</label>
+                <input type="text" class="form-control selected-cluster-name" id="connect-cluster-name" value="" disabled>
+              </div>
+              <div class="mb-3">
+                <label for="target-cluster-select" class="col-form-label">Target cluster<i>*</i></label>
+                <select class="form-select" id="target-cluster-select" aria-label="Floating label select example">
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary btn-blue">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Disconnect Modal -->
+    <div class="modal fade" id="disconnectModal" tabindex="-1" aria-labelledby="disconnectModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="disconnectModalLabel">Disconnect</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>You are attempting to disconnect for</p>
+            <p>Connection ID
+              <sapn class="modal-body-emphasis selected-cluster-mc-connection-id"></sapn>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary btn-purple">Disconnect</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Registration command Modal -->
+    <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
+         aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="registrationModalLabel">Registration command</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Run this command on each of the existing master node you want to register.</p>
+            <textarea class="form-control copy-text" id="copy-text" readonly>
+            </textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-primary btn-blue" id="copy-clipboard-btn" data-clipboard-action="copy"
+                    data-clipboard-target="#copy-text"
+                    bs-container="body" data-bs-toggle="popover" data-bs-placement="top"
+                    data-bs-content="Copied.">
+              Copy to clipboard
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- content -->
+    <section class="content">
+      <div class="content-title-group">
+        <h2>Cluster</h2>
+        <div class="btn-group">
+          <button id="btn-connect" class="btn-common btn-blue btn-padding-4-12" type="button" data-bs-toggle="modal" data-bs-target="#connectModal">
+            Connect
+          </button>
+          <button class="btn-common btn-purple btn-padding-4-12" id="disconnectBtn" type="button" data-bs-toggle="modal" data-bs-target="#disconnectModal">
+            Disconnect
+          </button>
+          <button class="btn-common btn-blue btn-padding-4-12" type="button" data-bs-toggle="modal" data-bs-target="#importModal">
+            Import
+          </button>
+          <button class="btn-common btn-red btn-padding-4-12" type="button" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Delete
+          </button>
+        </div>
+      </div>
+
+      <!-- content-table -->
+      <div class="table-wrapper-h240 hidden-scroll">
+        <table class="content-table">
+          <thead class="single-line">
+          <tr>
+            <th></th>
+            <th>State</th>
+            <th>Name</th>
+            <th>API address</th>
+            <th>API version</th>
+            <th>Registration</th>
+            <th>Nodes</th>
+            <th width=18%">MC network ID</th>
+            <th>MC network status</th>
+          </tr>
+          </thead>
+          <tbody id="cluster-list">
+          {% for i in number_null_records %}
+          <tr>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+            <td/>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- selected-content -->
+      <div class="content-selection" id="node">
+
+        <!-- selected -->
+        <div class="selected-title-group">
+          <h2>Cluster:
+            <span class="selected-cluster-name" id="selected-cluster-name"></span>
+            <span class="label-common label-active selected-cluster-state"></span>
+          </h2>
+          <div class="selected-info">
+            <p>MC network role: <span id="selected-node-role">{{ default_node.role }}</span></p>
+            <p>Version: <span id="selected-cluster-api-version">{{ default_cluster.api_version }}</span></p>
+            <p>API address: <span id="selected-cluster-api-address">{{ default_cluster.api_address }}</span></p>
+          </div>
+        </div>
+
+        <!-- tab -->
+        <nav>
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-nodes-tab" data-bs-toggle="tab" data-bs-target="#nav-nodes"
+                    type="button" role="tab" aria-controls="nav-nodes" aria-selected="true" style="height: 40px">Nodes
+            </button>
+            <button class="nav-link" id="nav-network-tab" data-bs-toggle="tab" data-bs-target="#nav-network"
+                    type="button" role="tab" aria-controls="nav-network" aria-selected="false" style="height: 40px">MC network
+            </button>
+            <button class="nav-link" id="nav-migrations-tab" data-bs-toggle="tab"
+                    data-bs-target="#nav-migrations" type="button" role="tab" aria-controls="nav-migrations"
+                    aria-selected="false" style="height: 40px">Migrations
+            </button>
+            <button class="nav-link" id="nav-conditions-tab" data-bs-toggle="tab"
+                    data-bs-target="#nav-conditions" type="button" role="tab" aria-controls="nav-conditions"
+                    aria-selected="false" style="height: 40px">Component condition
+            </button>
+          </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+          <!-- Nodes tab -->
+          <div class="tab-pane fade show active" id="nav-nodes" role="tabpanel" aria-labelledby="nav-nodes-tab">
+            <div class="tab-nodes-info">
+              <p>Node: <strong id="selected-node-name"></strong></p>
+              <p>Host interface: <strong id="selected-node-host-if"></strong></p>
+            </div>
+            <div class="graph-wrapper">
+              <div class="graph-common">
+                <h3>CPU Usage</h3>
+                <div class="graph">
+                  <div id="chart1"></div>
+                </div>
+              </div>
+              <div class="graph-common">
+                <h3>RAM Usage</h3>
+                <div class="graph">
+                  <div id="chart2"></div>
+                </div>
+              </div>
+              <div class="graph-common">
+                <h3>Pod Capacity</h3>
+                <div class="graph">
+                  <div id="chart2-1"></div>
+                </div>
+              </div>
+              <div class="graph-common network">
+                <h3>Network Usage(Kbps)</h3>
+                <div class="graph">
+                  <div id="chart3"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="table-wrapper table-wrapper-bm0 hidden-scroll">
+              <table class="content-table">
+                <thead class="single-line">
+                <tr>
+                  <th/>
+                  <th>Status</th>
+                  <th>Name</th>
+                  <th>Roles</th>
+                  <th>Version</th>
+                  <th>IP</th>
+                  <th>OS</th>
+                  <th>CPUs</th>
+                  <th>RAM</th>
+                  <th>Pods</th>
+                  <th>Age</th>
+                </tr>
+                </thead>
+                <tbody id="node-list">
+                <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- MC network tab -->
+          <div class="tab-pane fade" id="nav-network" role="tabpanel" aria-labelledby="nav-network-tab">
+            <div class="tab-nodes-info">
+              <p>Connection ID:
+                <strong class="selected-cluster-mc-connection-id"></strong>
+                <span class="label-common label-unavailable" id="selected-cluster-mc-status">Unavailable</span>
+              </p>
+            </div>
+            <div class="tab-nodes-info tab-globalnet">
+              <p>Globalnet: <span class="label-common label-enabled" id="selected-cluster-mc-globalnet"></span></p>
+              <p>Global CIDR: <strong id="selected-cluster-mc-global-cidr"></strong></p>
+              <p>Cable driver: <strong id="selected-cluster-mc-cable-driver"></strong></p>
+            </div>
+
+            <div class="mc-network-wrapper">
+              <div class="width-60">
+                <h3 class="tab-sub-title">Connection specification</h3>
+                <div class="connection-wrapper" style="height: 260px">
+                  <table class="content-table" style="table-layout: auto; width: 100%; table-layout: fixed;">
+                    <colgroup>
+                      <col width="30%"/>
+                      <col width="35%"/>
+                      <col width="35%"/>
+                    </colgroup>
+                    <thead class="single-line">
+                    <tr>
+                      <th></th>
+                      <th>Local</th>
+                      <th>Remote</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>Public</td>
+                      <td id="selected-cluster-mc-local-public"></td>
+                      <td id="selected-cluster-mc-remote-public"></td>
+                    </tr>
+                    <tr>
+                      <td>Gateway</td>
+                      <td id="selected-cluster-mc-local-gateway"></td>
+                      <td id="selected-cluster-mc-remote-gateway"></td>
+                    </tr>
+                    <tr>
+                      <td>Service CIDR</td>
+                      <td id="selected-cluster-mc-local-service-cidr"></td>
+                      <td id="selected-cluster-mc-remote-service-cidr"></td>
+                    </tr>
+                    <tr>
+                      <td>Cluster CIDR</td>
+                      <td id="selected-cluster-mc-local-cluster-cidr"></td>
+                      <td id="selected-cluster-mc-remote-cluster-cidr"></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="graph-wrapper">
+                <div class="graph-common network">
+                  <h3>MC Network Latency(ms)</h3>
+                  <div class="graph-mc">
+                    <div id="chart4"></div>
+                  </div>
+                </div>
+                <div class="graph-common network">
+                  <h3>MC Network Usage(Kbps)</h3>
+                  <div class="graph-mc">
+                    <div id="chart5"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Conditions -->
+          <div class="tab-pane fade" id="nav-conditions" role="tabpanel" aria-labelledby="nav-conditions-tab">
+            <div class="table-wrapper-h420 hidden-scroll">
+              <table class="content-table">
+                <thead class="single-line">
+                <tr>
+                  <th width="5%"/>
+                  <th width="15%">Condition</th>
+                  <th width="10%">Status</th>
+                  <th width="10%">Updated</th>
+                  <th width="40%">Message</th>
+                  <th width="20%"/>
+                </tr>
+                </thead>
+                <tbody id="cluster-conditions">
+                <tr><td/><td/><td/><td/><td/><td/></tr>
+                <tr><td/><td/><td/><td/><td/><td/></tr>
+                <tr><td/><td/><td/><td/><td/><td/></tr>
+                <tr><td/><td/><td/><td/><td/><td/></tr>
+                <tr><td/><td/><td/><td/><td/><td/></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        <!-- Migration tab -->
+        <div class="tab-pane fade" id="nav-migrations" role="tabpanel" aria-labelledby="nav-migrations-tab">
+          <div class="btn-group">
+            <button
+                class="btn-common btn-red btn-padding-4-12"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#delete-modal-migration">Delete
+            </button>
+          </div>
+          <div class="table-wrapper table-wrapper-h380 margin-top-16 hidden-scroll">
+            <table class="content-table">
+              <thead class="single-line">
+              <tr>
+                <th></th>
+                <th>Migration ID</th>
+                <th>State</th>
+                <th>Namespace</th>
+                <th>Pod</th>
+                <th>Source cluster</th>
+                <th>Target cluster</th>
+                <th>Target node</th>
+                <th>Migration task</th>
+                <th>Retry</th>
+                <th>Error message</th>
+                <th>Start date</th>
+                <th>End date</th>
+              </tr>
+              </thead>
+              <tbody id="migration-list">
+              <tr><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              <tr><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              <tr><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              <tr><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              <tr><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+          <!-- Not Available tab -->
+          <div class="tab-pane fade" id="nav-na" role="tabpanel" aria-labelledby="nav-na-tab">
+            <div class="not-available">Not Available</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="{% static "js/clipboard.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/pages/cluster.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/apexcharts.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/chart.js" %}" type="text/javascript"></script>
+  {% endwith %}
+{% endblock %}

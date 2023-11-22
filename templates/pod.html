@@ -1,0 +1,468 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+  <!-- Delete Pod -->
+  <div class="modal fade" id="delete-modal-pod" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>You are attempting to delete pod
+            <span class="modal-body-emphasis" name="selected-pod-name"></span>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-red">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Service -->
+  <div class="modal fade" id="delete-modal-service" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>You are attempting to delete service
+            <span class="modal-body-emphasis"></span>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-red">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Deployment -->
+  <div class="modal fade" id="delete-modal-deployment" tabindex="-1" aria-labelledby="deleteModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>You are attempting to delete Deployment
+            <span class="modal-body-emphasis"></span>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-red">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete daemonset -->
+  <div class="modal fade" id="delete-modal-daemonset" tabindex="-1" aria-labelledby="deleteModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>You are attempting to delete DaemonSet
+            <span class="modal-body-emphasis"></span>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-red">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Migrate Modal -->
+  <div class="modal fade" id="migrate-modal-pod" tabindex="-1" aria-labelledby="migrateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="migrateModalLabel">Migrate Pod</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Pod Name</label>
+              <input type="text" class="form-control" id="recipient-name" name="selected-pod-name" value="" disabled>
+            </div>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">Target cluster<i>*</i></label>
+              <select class="form-select" id="migrate-cluster-list" aria-label="Floating label select example">
+                <option value="none" selected disabled hidden>Open this select menu</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="message-text" class="col-form-label">Target node<i>*</i></label>
+              <select class="form-select" id="migrate-node-list" aria-label="Floating label select example">
+                <option value="none" selected disabled hidden>Open this select menu</option>
+              </select>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault">
+                Delete original pod resource after migration is complete.
+              </label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-blue">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Export Modal -->
+  <div class="modal fade" id="export-modal-service" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exportModalLabel">Export</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>You are attempting to export service to cluster
+            <span class="modal-body-emphasis"></span>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-blue">Export</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Unexport Modal -->
+  <div class="modal fade" id="unexport-modal-service" tabindex="-1" aria-labelledby="unexportModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="unexportModalLabel">Unexport</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>You are attempting to unexport service from cluster
+            <span class="modal-body-emphasis"></span>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-purple">Unexport</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- content -->
+  <section class="content">
+    <div class="content-title-group">
+      <h2>Pod</h2>
+      <div class="btn-group">
+        <button
+            class="btn-common btn-blue btn-padding-4-12"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#migrate-modal-pod"
+            id="migrateBtn">Migrate
+        </button>
+        <button
+            class="btn-common btn-red btn-padding-4-12"
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#delete-modal-pod">Delete
+        </button>
+      </div>
+    </div>
+
+    <div class="table-top">
+      <div class="form-dropdown-wrapper">
+        <div class="form-dropdown" onclick="dropdownSelected(1)">
+          <a class="dropdown-select dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="dropdown-select-title">Cluster</span>
+            <span id="selected-cluster-name">{{ selectedCluster }}</span>
+          </a>
+          <ul class="dropdown-menu" id="cluster-list">
+            {% for cluster in clusters.clusters %}
+              <li><a class="cluster-item" href="#">{{ cluster.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="form-dropdown" onclick="dropdownSelected(2)">
+          <a class="dropdown-select dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="dropdown-select-title">Namespace</span>
+            <span id="selected-namespace-name">{{ selectedNamespace }}</span>
+          </a>
+          <ul class="dropdown-menu" id="namespace-list">
+            {% for namespace in namespaces.namespaces %}
+              <li><a class="namespace-item" href="#">{{ namespace.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- content-table -->
+    <div class="table-wrapper-h240">
+      <table class="content-table">
+        <thead class="single-line">
+        <tr>
+          <th></th>
+          <th>State</th>
+          <th width="30%">Name</th>
+          <th>Namespace</th>
+          <th>IP</th>
+          <th>Node</th>
+          <th>Age</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody id="pod-list">
+        {% for pod in pod_list.pods %}
+          <tr>
+            <td><input type="radio" class="form-check-input"></td>
+            <td><span class="label-common label-{{ pod.state|lower }}">{{ pod.state }}</span></td>
+            <td width="30%"><a href="#node" class="label-name">{{ pod.name }}</a></td>
+            <td>{{ pod.namespace }}</td>
+            {% if pod.pod_ip == None %}
+            <td></td>
+            {% else %}
+            <td>{{ pod.pod_ip }}</td>
+            {% endif %}
+            {% if pod.node == None %}
+            <td></td>
+            {% else %}
+            <td>{{ pod.node }}</td>
+            {% endif %}
+            {% if pod.age == None %}
+            <td></td>
+            {% else %}
+            <td>{{ pod.age }}</td>
+            {% endif %}
+
+            <td />
+          </tr>
+        {% endfor %}
+        {% for i in number_null_records %}
+        <tr><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- selected-content -->
+    <div class="content-selection" id="node">
+      <!-- selected -->
+      <div class="selected-title-group" id="selected-pod">
+        <h2> Pod:
+            <span class="selected-name"></span>
+            <span class="label-common label-unavailable">Unavailable</span>
+        </h2>
+
+        <div class="selected-info">
+            <p>Namespace: <span id="selected-pod-namespace">None</span></p>
+            <p>Pod IP: <span id="selected-pod-ip">None</span></p>
+            <p>Labels: <span id="selected-pod-label">None</span></p>
+        </div>
+      </div>
+
+      <!-- tab -->
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active" id="nav-service-tab" data-bs-toggle="tab"
+                  data-bs-target="#nav-service" type="button" role="tab" aria-controls="nav-service"
+                  aria-selected="true" style="height: 40px">Services
+          </button>
+          <button class="nav-link" id="nav-deployment-tab" data-bs-toggle="tab"
+                  data-bs-target="#nav-deployment" type="button" role="tab" aria-controls="nav-deployment"
+                  aria-selected="false" style="height: 40px">Deployment
+          </button>
+          <button class="nav-link" id="nav-daemonset-tab" data-bs-toggle="tab" data-bs-target="#nav-daemonset"
+                  type="button" role="tab" aria-controls="nav-daemonset" aria-selected="false" style="height: 40px">DaemonSet
+          </button>
+          <button class="nav-link" id="nav-conditions-tab" data-bs-toggle="tab"
+                  data-bs-target="#nav-conditions" type="button" role="tab" aria-controls="nav-conditions"
+                  aria-selected="false" style="height: 40px">Conditions
+          </button>
+        </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <!-- Services tab -->
+        <div class="tab-pane fade show active" id="nav-service" role="tabpanel"
+             aria-labelledby="nav-service-tab">
+          <div class="btn-group">
+            <button
+                class="btn-common btn-blue btn-padding-4-12"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#export-modal-service">Export
+            </button>
+            <button
+                class="btn-common btn-purple btn-padding-4-12"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#unexport-modal-service">Unexport
+            </button>
+            <button
+                class="btn-common btn-red btn-padding-4-12"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#delete-modal-service">Delete
+            </button>
+          </div>
+
+          <div class="table-wrapper table-wrapper-h420 margin-top-16 hidden-scroll">
+            <table class="content-table">
+              <thead class="single-line">
+              <tr>
+                <th width="1%"></th>
+                <th width="5%">State</th>
+                <th width="15%">Name</th>
+                <th>Namespace</th>
+                <th>Type</th>
+                <th>Cluster IP</th>
+                <th>External IP</th>
+                <th>Ports</th>
+                <th>Age</th>
+                <th>Export target</th>
+                <th>Export status</th>
+              </tr>
+              </thead>
+              <tbody id="service-list">
+              <tr><td width="1%"/><td width="5%"/><td width="15%"/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              <tr><td width="1%"/><td width="5%"/><td width="15%"/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              <tr><td width="1%"/><td width="5%"/><td width="15%"/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              <tr><td width="1%"/><td width="5%"/><td width="15%"/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              <tr><td width="1%"/><td width="5%"/><td width="15%"/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Deployment tab -->
+        <div class="tab-pane fade" id="nav-deployment" role="tabpanel" aria-labelledby="nav-deployment-tab">
+          <div class="tab-nodes-info padding-bottom-16">
+            <p>Deployment:
+              <strong id="selected-deployment-name">None</strong>
+            </p>
+          </div>
+          <div class="btn-group">
+            <button class="btn-common btn-red btn-padding-4-12"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#delete-modal-deployment">Delete
+            </button>
+          </div>
+          <table class="table table-vertical">
+            <thead>
+            <tr>
+              <th>State</th>
+              <th>Name</th>
+              <th>Namespace</th>
+              <th>Ready</th>
+              <th>Restart</th>
+              <th>Age</th>
+            </tr>
+            </thead>
+            <tbody id="deployment-list">
+            <tr>
+              <td>
+                <span class="label-common label-unavailable">Unavailable</span>
+              </td>
+              <td/>
+              <td/>
+              <td/>
+              <td/>
+              <td/>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- DaemonSet tab -->
+        <div class="tab-pane fade" id="nav-daemonset" role="tabpanel" aria-labelledby="nav-daemonset-tab">
+          <div class="btn-group">
+            <button
+                class="btn-common btn-red btn-padding-4-12"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#delete-modal-daemonset">Delete
+            </button>
+          </div>
+
+          <table class="table table-vertical">
+            <thead>
+            <tr>
+              <th>State</th>
+              <th>Name</th>
+              <th>Namespace</th>
+              <th>Running pod</th>
+            </tr>
+            </thead>
+            <tbody id="daemonset-list">
+              <tr>
+                <td>
+                  <span class="label-common label-unavailable">Unavailable</span>
+                </td>
+                <td/><td/><td/>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Conditions -->
+        <div class="tab-pane fade" id="nav-conditions" role="tabpanel" aria-labelledby="nav-conditions-tab">
+          <div class="table-wrapper table-wrapper-h420 hidden-scroll">
+            <table class="content-table">
+              <thead class="single-line">
+              <tr>
+                <th width="2%"></th>
+                <th width="10%">Condition</th>
+                <th>Status</th>
+                <th>Updated</th>
+                <th>Message</th>
+              </tr>
+              </thead>
+              <tbody id="pod-conditions">
+              <tr><td width="2%"/><td width="20%"/><td/><td/><td/></tr>
+              <tr><td width="2%"/><td width="20%"/><td/><td/><td/></tr>
+              <tr><td width="2%"/><td width="20%"/><td/><td/><td/></tr>
+              <tr><td width="2%"/><td width="20%"/><td/><td/><td/></tr>
+              <tr><td width="2%"/><td width="20%"/><td/><td/><td/></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Not Available tab -->
+        <div class="tab-pane fade" id="nav-na" role="tabpanel" aria-labelledby="nav-na-tab">
+          <div class="not-available">Not Available</div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <script src="{% static "js/pages/pod.js" %}" type="text/javascript"></script>
+
+{% endblock %}

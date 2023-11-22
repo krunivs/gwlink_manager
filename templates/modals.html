@@ -1,0 +1,131 @@
+{% load static %}
+
+<!-- Profile Modal -->
+<div
+    class="modal fade"
+    id="profileModal"
+    tabindex="-1"
+    aria-labelledby="profileModalLabel"
+    aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content profile">
+      <div class="modal-header">
+        <h5 class="modal-title" id="profileModalLabel">Profile</h5>
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="profile-table">
+          <tbody>
+          <tr>
+            <td class="title"><span>User Id</span></td>
+            <td class="content"><span id="userId">{{ user.username }}</span></td>
+          </tr>
+          <tr>
+            <td class="title"><span>Name</span></td>
+            <td class="content"><span id="userName">{{ user.name }}</span></td>
+          </tr>
+          <tr>
+            <td class="title"><span>Email</span></td>
+            <td class="content"><span id="userEmail">{{ user.email }}</span></td>
+          </tr>
+          <tr>
+            <td class="title"><span>Phone Number</span></td>
+            <td class="content"><span id="userPhoneNumber">{{ user.tel }}</span></td>
+          </tr>
+          <tr>
+            <td class="title"><span>Department</span></td>
+            <td class="content"><span id="userDepartment">{{ user.department }}</span></td>
+          </tr>
+          <tr>
+            <td class="title"><span>Organization</span></td>
+            <td class="content"><span id="userOrganization">{{ user.organization }}</span></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button
+            type="button"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Message Modal -->
+<div
+    class="modal fade"
+    id="messageModal"
+    tabindex="-1"
+    aria-labelledby="messageModalLabel"
+    aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="messageModalLabel"></h5>
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" id="message-message">
+      </div>
+      <div class="modal-footer">
+        <button
+            type="button"
+            class="btn-common btn-primary"
+            data-bs-dismiss="modal"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error Modal -->
+<div
+    class="modal fade"
+    id="errorModal"
+    tabindex="-1"
+    aria-labelledby="errorModalLabel"
+    aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" id="error-message"></div>
+      <div class="modal-footer">
+        <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            id="error-close-btn"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

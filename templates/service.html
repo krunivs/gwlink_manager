@@ -1,0 +1,404 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% with default_cluster=cluster_details.clusters.0 default_service=service_list.services.0 %}
+
+<!-- Delete Modal 1 -->
+<div class="modal fade" id="delete-modal-pod" tabindex="-1" aria-labelledby="deleteModalPodLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalPodLabel">Confirm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You are attempting to delete pod
+                    <span class="modal-body-emphasis" name="selected-pod-name"></span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-red">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal 2 -->
+<div class="modal fade" id="delete-modal-service" tabindex="-1" aria-labelledby="deleteModalServiceLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalServiceLabel">Confirm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You are attempting to delete service
+                    <span class="modal-body-emphasis">proxy-vlc-http</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-red">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal 3 -->
+<div class="modal fade" id="deleteModal3" tabindex="-1" aria-labelledby="deleteModalPodLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You are attempting to delete service
+                    <span class="modal-body-emphasis">proxy-vlc-http</span>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-red">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Migrate Modal -->
+<div class="modal fade" id="migrate-modal-pod" tabindex="-1" aria-labelledby="migrateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="migrateModalLabel">Migrate Pod</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Pod Name</label>
+                        <input type="text" class="form-control" id="recipient-name" name="selected-pod-name" value="" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Target cluster<i>*</i></label>
+                        <select class="form-select" id="migrate-cluster-list" aria-label="Floating label select example">
+                            <option value="none" selected disabled hidden>Open this select menu</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message-text" class="col-form-label">Target node<i>*</i></label>
+                        <select class="form-select" id="migrate-node-list" aria-label="Floating label select example">
+                            <option value="none" selected disabled hidden>Open this select menu</option>
+                        </select>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">
+                            Delete original pod resource after migration is complete.
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-blue">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Modal -->
+<div class="modal fade" id="export-modal-service" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">Export</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You are attempting to export service to cluster</p>
+                <span class="selected-cluster-name">{{ default_cluster.mc_network.remote.name }}</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-blue">Export</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Unexport Modal -->
+<div class="modal fade" id="unexport-modal-service" tabindex="-1" aria-labelledby="unexportModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unexportModalLabel">Unexport</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>You are attempting to unexport service from cluster <span
+                        class="remote-cluster-name">{{ default_cluster.mc_network.remote.name }}</span>.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-purple">Unexport</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- content -->
+<section class="content">
+
+    <div class="content-title-group">
+        <h2>Service</h2>
+        <div class="btn-group">
+            <button
+                    class="btn-common btn-blue btn-padding-4-12"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#export-modal-service">Export
+            </button>
+            <button
+                    class="btn-common btn-purple btn-padding-4-12"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#unexport-modal-service">Unexport
+            </button>
+            <button
+                    class="btn-common btn-red btn-padding-4-12"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#delete-modal-service">Delete
+            </button>
+        </div>
+    </div>
+
+    <div class="table-top">
+        <div class="form-dropdown-wrapper">
+            <div class="form-dropdown" onclick="dropdownSelected(1)">
+                <a class="dropdown-select dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    <span class="dropdown-select-title">Cluster</span>
+                    <span id="selected-cluster-name">{{ selectedCluster }}</span>
+                </a>
+                <ul class="dropdown-menu" id="cluster-list">
+                    {% for cluster in clusters.clusters %}
+                    <li><a class="cluster-item" href="#">{{ cluster.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="form-dropdown" onclick="dropdownSelected(2)">
+                <a class="dropdown-select dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                   aria-expanded="false">
+                    <span class="dropdown-select-title">Namespace</span>
+                    <span id="selected-namespace-name">{{ selectedNamespace }}</span>
+                </a>
+                <ul class="dropdown-menu" id="namespace-list">
+                    {% for namespace in namespaces.namespaces %}
+                    <li><a class="namespace-item" href="#">{{ namespace.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- content-table -->
+    <div class="table-wrapper-h240">
+        <table class="content-table">
+            <thead class="single-line">
+            <tr>
+                <th></th>
+                <th>State</th>
+                <th width="15%">Name</th>
+                <th>Namespace</th>
+                <th>Type</th>
+                <th>Cluster IP</th>
+                <th>External IP</th>
+                <th>Ports</th>
+                <th>Age</th>
+                <th>Export target</th>
+                <th>Export status</th>
+            </tr>
+            </thead>
+            <tbody id="service-list">
+            {% for service in service_list.services %}
+            <tr>
+                <td><input type="radio" class="form-check-input"></td>
+                <td><span class="label-common label-{{ service.state|lower }}">{{ service.state }}</span></td>
+                <td width="15%"><a href="#" class="label-name service-name">{{ service.name }}</a></td>
+                <td>{{ service.namespace }}</td>
+                <td>{{ service.service_type }}</td>
+                <td>{{ service.cluster_ip }}</td>
+                <td>{{ service.external_ips|join:" " }}</td>
+                <td>
+                    {% for port in service.ports %}
+                    {% if port.node_port != None %}
+                    {{ port.node_port }}:{{ port.port }}/{{ port.protocol }} {{ port.target_port }} <br>
+                    {% else %}
+                    {{ port.port }}/{{ port.protocol }} {{ port.target_port }} <br>
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                {% if service.age == None %}
+                <td></td>
+                {% else %}
+                <td>{{ service.age }}</td>
+                {% endif %}
+                <td>{{ service.service_export.target }}</td>
+                {% if service.service_export.status == "false" %}
+                <td><span class="label-common label-unavailable">Unavailable</span></td>
+                {% else %}
+                <td><span class="label-common label-active"> Active </span></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% for i in number_null_records %}
+            <tr><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/><td/></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- selected-content -->
+    <div class="content-selection" id="node">
+        <div class="selected-title-group" id="selected-service">
+            <!-- selected -->
+            <h2>Service:
+                <span id="selected-service-name" class="selected-name"></span>
+                <span id="selected-service-state" data-state="unknown"
+                      class="label-common label-unavailable">Unavailable</span>
+            </h2>
+            <div class="selected-info">
+                <p>Namespace: <span id="selected-service-namespace-name">None</span></p>
+                <p>Type: <span id="selected-service-type">None</span></p>
+                <p>Cluster IP: <span id="selected-service-cluster-ip">None</span></p>
+                <p>Selector: <span id="selected-service-selector">None</span></p>
+            </div>
+        </div>
+        <!-- tab -->
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-service-tab" data-bs-toggle="tab"
+                        data-bs-target="#nav-service" type="button" role="tab" aria-controls="nav-service"
+                        aria-selected="true" style="height: 40px">Pods
+                </button>
+                <button class="nav-link" id="nav-ports-tab" data-bs-toggle="tab" data-bs-target="#nav-ports"
+                        type="button" role="tab" aria-controls="nav-ports" aria-selected="false" style="height: 40px">
+                    Ports
+                </button>
+                <button class="nav-link" id="nav-export-tab" data-bs-toggle="tab" data-bs-target="#nav-export"
+                        type="button" role="tab" aria-controls="nav-export" aria-selected="false" style="height: 40px">
+                    Service Export
+                </button>
+            </div>
+        </nav>
+
+        <div class="tab-content" id="nav-tabContent">
+            <!-- Services tab -->
+            <div class="tab-pane fade show active" id="nav-service" role="tabpanel"
+                 aria-labelledby="nav-service-tab">
+                <div class="btn-group">
+                    <button
+                            class="btn-common btn-blue btn-padding-4-12"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#migrate-modal-pod"
+                            id="migrateBtn">Migrate
+                    </button>
+                    <button
+                            class="btn-common btn-red btn-padding-4-12"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#delete-modal-pod">Delete
+                    </button>
+                </div>
+
+                <!-- Pods list tab -->
+                <div class="table-wrapper table-wrapper-h420 margin-top-16 hidden-scroll">
+                    <table class="content-table">
+                        <thead class="single-line">
+                        <tr>
+                            <th></th>
+                            <th>State</th>
+                            <th width="20%">Name</th>
+                            <th>Namespace</th>
+                            <th>IP</th>
+                            <th>Node</th>
+                            <th>Age</th>
+                        </tr>
+                        </thead>
+                        <tbody id="pod-list">
+                        <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                        <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                        <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                        <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                        <tr><td/><td/><td/><td/><td/><td/><td/></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Ports tab -->
+            <div class="tab-pane fade" id="nav-ports" role="tabpanel" aria-labelledby="nav-ports-tab">
+                <table class="content-table">
+                    <thead class="single-line">
+                    <tr>
+                        <th>Name</th>
+                        <th>Port</th>
+                        <th>Protocol</th>
+                        <th>Target</th>
+                        <th>Node Port</th>
+                        <th>Public Ports</th>
+                    </tr>
+                    </thead>
+                    <tbody id="selected-service-port-list">
+                    <tr><td/><td/><td/><td/><td/></tr>
+                    <tr><td/><td/><td/><td/><td/></tr>
+                    <tr><td/><td/><td/><td/><td/></tr>
+                    <tr><td/><td/><td/><td/><td/></tr>
+                    <tr><td/><td/><td/><td/><td/></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Service Export tab -->
+            <div class="tab-pane fade" id="nav-export" role="tabpanel" aria-labelledby="nav-export-tab">
+                <table class="table table-vertical">
+                    <thead>
+                    <tr>
+                        <th>Export target</th>
+                        <th>Export status</th>
+                        <th>Reason</th>
+                        <th>ClusterSet IP</th>
+                        <th>Service discovery</th>
+                    </tr>
+                    </thead>
+                    <tbody id="selected-service-service-export-list">
+                    <tr>
+                        <td/>
+                        <td><span class="label-common label-unavailable">Unavailable</span>
+                        </td>
+                        <td/>
+                        <td/>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Not Available tab -->
+            <div class="tab-pane fade" id="nav-na" role="tabpanel" aria-labelledby="nav-na-tab">
+                <div class="not-available">Not Available</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<script src="{% static "js/pages/service.js" %}" type="text/javascript"></script>
+{% endwith %}
+
+{% endblock %}
