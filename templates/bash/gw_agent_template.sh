@@ -73,6 +73,11 @@ SyslogIdentifier=gw_agent
 WantedBy=multi-user.target
 EOF
 
+# delete submariner components
+echo "[INFO] Delete submariner components"
+cd $INSTALL_DIR/gw_agent/scripts
+./delete_subm.sh || true
+
 # enable and start service
 echo "[INFO] Register and run gw_agent service"
 systemctl daemon-reload
