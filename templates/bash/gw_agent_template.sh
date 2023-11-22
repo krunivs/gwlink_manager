@@ -15,12 +15,10 @@ REPO_URL=https://github.com/krunivs/gw_agent.git
 SERVICE_FILE=/etc/systemd/system/gw_agent.service
 PROJECT=gw_agent
 
-# if service exist, remove it
-if service_exists $PROJECT; then
-    systemctl stop $PROJECT
-    systemctl disable $PROJECT
-    systemctl daemon-reload
-fi
+# stop and disable service
+systemctl stop $PROJECT || true
+systemctl disable $PROJECT || true
+systemctl daemon-reload || true
 
 # check python runtime
 echo "[INFO] Create gw_agent install dir, $INSTALL_DIR"
