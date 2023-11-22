@@ -1,26 +1,6 @@
 #!/bin/bash
 set -e
 
-function error() {
-    local message=$1
-    echo -e "[ERROR] $message"
-    exit 1
-}
-
-function info() {
-    local message=$1
-    echo -e "[INFO] $message"
-}
-
-function service_exists() {
-    local n=$1
-    if [[ $(systemctl list-units --all -t service --full --no-legend "$n.service" | sed 's/^\s*//g' | cut -f1 -d' ') == $n.service ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
 CLUSTER={cluster}
 CENTER_IP={manager_ip}
 CENTER_PORT={manager_port}
@@ -43,12 +23,12 @@ if service_exists $PROJECT; then
 fi
 
 # check python runtime
-info "Create gw_agent install dir, $INSTALL_DIR"
+echo "[INFO] Create gw_agent install dir, $INSTALL_DIR"
 mkdir -p $INSTALL_DIR
 
 # gw-agent git clone
 cd $INSTALL_DIR
-info "Git clone gw_agent package, $INSTALL_DIR"
+echo "[INFO] Git clone gw_agent package, $INSTALL_DIR"
 
 if [[ -d "$INSTALL_DIR/gw_agent" ]]; then
   rm -rf $INSTALL_DIR/gw_agent
@@ -56,12 +36,12 @@ fi
 git clone $REPO_URL
 
 # install python packages
-info "Install required python package, $INSTALL_DIR"
+echo "[INFO] Install required python package, $INSTALL_DIR"
 cd $INSTALL_DIR/gw_agent
 pip3 install -r requirements.txt
 
 # create gw-agent config.ini
-info "Create gw_agent config.ini, $INSTALL_DIR/gw_agent/static/config.ini"
+echo "[INFO] Create gw_agent config.ini, $INSTALL_DIR/gw_agent/static/config.ini"
 cat << EOF | sudo tee $INSTALL_DIR/gw_agent/static/config.ini
 [ClusterSection]
 cluster_id=$CLUSTER
@@ -77,7 +57,7 @@ token=
 EOF
 
 # create gw_agent.service
-info "Create gw-gw_agent service, $SERVICE_FILE"
+echo "[INFO] Create gw-gw_agent service, $SERVICE_FILE"
 cat << EOF | sudo tee $SERVICE_FILE
 [Unit]
 Description=GEdge Gateway Agent
@@ -102,12 +82,12 @@ WantedBy=multi-user.target
 EOF
 
 # delete submariner components
-info "Delete submariner components"
+echo "[INFO] Delete submariner components"
 cd $INSTALL_DIR/gw_agent/scripts
 ./delete_subm.sh || true
 
 # enable and start service
-info "Register and run gw_agent service"
+echo "[INFO] Register and run gw_agent service"
 systemctl daemon-reload
 systemctl start gw_agent
 systemctl enable gw_agent
