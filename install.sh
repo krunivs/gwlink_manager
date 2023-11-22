@@ -2,7 +2,7 @@
 PROJECT=gwlink_manager
 SERVICE_FILE=/etc/systemd/system/$PROJECT.service
 REPOSITORY=https://github.com/krunivs/$PROJECT.git
-PROJECT_ROOT=/usr/local/$PROJECT
+PROJECT_ROOT=/var/local/$PROJECT
 # HTTP_HOST=
 # HTTP_PORT=
 
@@ -50,7 +50,7 @@ fi
 
 # if project is not exist, git clone from gwlink_manager repository
 if [[ ! -f $PROJECT_ROOT ]]; then
-    cd /usr/local
+    cd /var/local
     git clone $REPOSITORY
 fi
 
