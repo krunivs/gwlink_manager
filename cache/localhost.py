@@ -43,15 +43,15 @@ class Configure:
 
         self.host = os.environ['GWLINK_MANAGER_HOST']
 
-        if 'GWLINK_AGENT_PORT' not in os.environ:
-            logger.error('Not found env variable, \'GWLINK_AGENT_PORT\'')
+        if 'GW_AGENT_PORT' not in os.environ:
+            logger.error('Not found env variable, \'GW_AGENT_PORT\'')
             ThreadUtil.exit_process()
 
-        if not os.environ['GWLINK_AGENT_PORT']:
-            logger.error('Not found env variable\'s value, \'GWLINK_AGENT_PORT=\'')
+        if not os.environ['GW_AGENT_PORT']:
+            logger.error('Not found env variable\'s value, \'GW_AGENT_PORT=\'')
             ThreadUtil.exit_process()
 
-        self.agent_port = os.environ['GWLINK_AGENT_PORT']
+        self.agent_port = os.environ['GW_AGENT_PORT']
 
         for i in range(0, len(argvs)):
             if argvs[i] == 'runserver':
