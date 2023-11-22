@@ -184,7 +184,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'WARNING',
             'propagate': True,
         },
@@ -282,8 +282,6 @@ REQUEST_WAIT_CHECK_TICK = 1             # 1sec
 REQUEST_EXPIRED_SECONDS = 60*60         # 60min
 EXPIRED_REQUESTS_CHECK_PERIOD = 30*60   # 30min
 
-# AGENT LOCAL PORT
-GW_AGENT_PORT = 8089
 
 # REDIS CONNECTION
 REDIS_PORT = 6379
